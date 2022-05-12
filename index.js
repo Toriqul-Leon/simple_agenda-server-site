@@ -34,11 +34,39 @@ async function run() {
       const result = await productsDatabase.insertOne(newProduct);
       res.send(result);
     });
+
     // !DELETE Product
     app.delete("/product/:productId", async (req, res) => {
       const id = req.params.productId;
       const query = { _id: ObjectId(id) };
       const result = await productsDatabase.deleteOne(query);
+      res.send(result);
+    });
+    // !GET Single Product
+    app.get("/product/:productId", async (req, res) => {
+      const id = req.params.productId;
+      const query = { _id: ObjectId(id) };
+      const result = await productsDatabase.findOne(query);
+      res.send(result);
+    });
+    // !Update Quantity
+    app.put("/product/:productId", async (req, res) => {
+      const id = req.params.productId;
+      const quantity = req.body;
+      console.log(quantity);
+      const query = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updatedQuantity = {
+        $set: {
+          quantity: quantity.quantity,
+          sold: quantity.sold,
+        },
+      };
+      const result = await productsDatabase.updateOne(
+        query,
+        updatedQuantity,
+        options
+      );
       res.send(result);
     });
   } finally {
