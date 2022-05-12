@@ -28,7 +28,12 @@ async function run() {
       const products = await cursor.toArray();
       res.send(products);
     });
-
+    // !ADD Product (POST)
+    app.post("/products", async (req, res) => {
+      const newProduct = req.body;
+      const result = await productsDatabase.insertOne(newProduct);
+      res.send(result);
+    });
     // !DELETE Product
     app.delete("/product/:productId", async (req, res) => {
       const id = req.params.productId;
