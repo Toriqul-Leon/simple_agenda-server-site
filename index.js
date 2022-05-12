@@ -28,6 +28,14 @@ async function run() {
       const products = await cursor.toArray();
       res.send(products);
     });
+
+    // !DELETE Product
+    app.delete("/product/:productId", async (req, res) => {
+      const id = req.params.productId;
+      const query = { _id: ObjectId(id) };
+      const result = await productsDatabase.deleteOne(query);
+      res.send(result);
+    });
   } finally {
     // await client.close();
   }
